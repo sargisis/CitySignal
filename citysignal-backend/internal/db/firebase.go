@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 	"log"
-	"path/filepath"
+	"os"
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go/v4"
@@ -19,17 +19,17 @@ var (
 func InitFirebase() {
 	ctx := context.Background()
 
-	// Use serviceAccountKey.json file
-	sa := option.WithCredentialsFile("serviceAccountKey.json")
+	// Read key from environment variable
+	keyJSON := os.Getenv("FIREBASE_SERVICE_ACCOUNT_KEY")
+	if keyJSON == "" {
+		log.Fatalf("FIREBASE_SERVICE_ACCOUNT_KEY environment variable is not set")
+	}
+
+	sa := option.WithCredentialsJSON([]byte(keyJSON))
 
 	app, err := firebase.NewApp(ctx, nil, sa)
 	if err != nil {
-		// Sometimes people run from different directories, let's try a fallback
-		saFallback := option.WithCredentialsFile(filepath.Join("..", "serviceAccountKey.json"))
-		app, err = firebase.NewApp(ctx, nil, saFallback)
-		if err != nil {
-			log.Fatalf("error initializing firebase app: %v\n", err)
-		}
+		log.Fatalf("error initializing firebase app: %v\n", err)
 	}
 
 	FirestoreClient, err = app.Firestore(ctx)
