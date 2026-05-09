@@ -42,3 +42,34 @@
 :global(.maplibregl-ctrl-group button:hover) {
   background: #1e293b !important;
 }
+
+/* Center Crosshair Pin for Selection Mode */
+.crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: dropIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.pinIcon {
+  font-size: 36px;
+  line-height: 1;
+  filter: drop-shadow(0 8px 8px rgba(0,0,0,0.6));
+  margin-bottom: -6px;
+}
+.pinShadow {
+  width: 16px;
+  height: 6px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  filter: blur(2px);
+}
+@keyframes dropIn {
+  from { transform: translate(-50%, -150%); opacity: 0; }
+  to { transform: translate(-50%, -100%); opacity: 1; }
+}
