@@ -26,6 +26,8 @@ interface MapViewProps {
   interactive?: boolean;
   onMapClick?: (lat: number, lng: number) => void;
   selectedPosition?: [number, number] | null;
+  selectionMode?: boolean;
+  onMapMove?: (lat: number, lng: number) => void;
   height?: string;
   className?: string;
 }
@@ -131,6 +133,8 @@ export default function MapView({
   interactive = true,
   onMapClick,
   selectedPosition,
+  selectionMode = false,
+  onMapMove,
   height = '500px',
   className = '',
 }: MapViewProps) {
@@ -138,10 +142,12 @@ export default function MapView({
   const mapInstanceRef = useRef<maplibregl.Map | null>(null);
   const popupRef = useRef<maplibregl.Popup | null>(null);
   const reportsDataRef = useRef<Report[]>(reports);
+  const onMapMoveRef = useRef(onMapMove);
   const { locale } = useLocale();
 
-  // Keep reports ref in sync
+  // Keep refs in sync
   reportsDataRef.current = reports;
+  onMapMoveRef.current = onMapMove;
 
   // Initialize map
   useEffect(() => {
@@ -169,7 +175,15 @@ export default function MapView({
     });
 
     if (interactive) {
-      map.addControl(new maplibregl.NavigationControl(), 'top-right');
+      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+      map.addControl(
+        new maplibregl.GeolocateControl({
+          positionOptions: { enableHighAccuracy: true },
+          trackUserLocation: true,
+          showUserLocation: true,
+        }),
+        'top-right'
+      );
     }
 
     // Create persistent popup
@@ -282,7 +296,7 @@ export default function MapView({
     });
 
     // General map click (for pin drop on report form)
-    if (onMapClick) {
+    if (onMapClick && !selectionMode) {
       map.on('click', (e) => {
         // Don't fire if we clicked on a report marker
         const features = map.queryRenderedFeatures(e.point, { layers: [REPORTS_CIRCLE_LAYER] });
@@ -290,6 +304,14 @@ export default function MapView({
         onMapClick(e.lngLat.lat, e.lngLat.lng);
       });
     }
+
+    // Map move (for selection mode)
+    map.on('moveend', () => {
+      if (onMapMoveRef.current) {
+        const c = map.getCenter();
+        onMapMoveRef.current(c.lat, c.lng);
+      }
+    });
 
     mapInstanceRef.current = map;
 
@@ -327,10 +349,10 @@ export default function MapView({
     }
   }, [reports, locale]);
 
-  // Update selected position
+  // Update selected position (only if not in selection mode)
   useEffect(() => {
     const map = mapInstanceRef.current;
-    if (!map) return;
+    if (!map || selectionMode) return;
 
     const updateSelected = () => {
       const source = map.getSource(SELECTED_SOURCE) as maplibregl.GeoJSONSource | undefined;
@@ -361,6 +383,12 @@ export default function MapView({
   return (
     <div className={`${styles.mapWrapper} ${className}`} style={{ height }}>
       <div ref={mapRef} className={styles.map} />
+      {selectionMode && (
+        <div className={styles.crosshair}>
+          <div className={styles.pinIcon}>📍</div>
+          <div className={styles.pinShadow} />
+        </div>
+      )}
     </div>
   );
 }

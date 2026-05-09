@@ -38,7 +38,7 @@ function ReportPageInner() {
 
   const [step, setStep] = useState<Step>(searchParams.get('category') ? 'location' : 'category');
   const [categoryId, setCategoryId] = useState(searchParams.get('category') || '');
-  const [position, setPosition] = useState<[number, number] | null>(null);
+  const [position, setPosition] = useState<[number, number]>([40.1872, 44.5152]);
   const [description, setDescription] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -131,8 +131,8 @@ function ReportPageInner() {
               </button>
               <MapView
                 height="400px"
-                onMapClick={handleMapClick}
-                selectedPosition={position}
+                selectionMode={true}
+                onMapMove={handleMapClick}
                 zoom={14}
                 center={position || [40.1872, 44.5152]}
               />
