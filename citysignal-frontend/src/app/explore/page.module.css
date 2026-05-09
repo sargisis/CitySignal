@@ -1,0 +1,17 @@
+.page { flex: 1; display: flex; flex-direction: column; padding: 20px; height: calc(100vh - 64px); overflow: hidden; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-shrink: 0; }
+.toolbarLeft { display: flex; align-items: baseline; gap: 12px; }
+.title { font-size: 1.25rem; font-weight: 800; }
+.count { color: var(--text-muted); font-size: 0.85rem; }
+.filters { margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px; animation: fadeIn 0.2s ease; flex-shrink: 0; }
+.filterGroup { display: flex; gap: 6px; flex-wrap: wrap; }
+.filterChip {
+  padding: 6px 14px; background: var(--bg-surface); border: 1px solid var(--border);
+  border-radius: 999px; color: var(--text-secondary); cursor: pointer;
+  font-size: 0.8rem; font-weight: 500; font-family: var(--font-sans);
+  transition: all var(--transition);
+}
+.filterChip:hover { border-color: var(--border-light); color: var(--text-primary); }
+.filterActive { border-color: var(--accent-primary) !important; color: var(--accent-primary) !important; background: rgba(245,158,11,0.05); }
+.mapContainer { flex: 1; min-height: 0; border-radius: var(--radius-lg); overflow: hidden; position: relative; }
+.mapLoading { height: calc(100vh - 200px); background: var(--bg-surface); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--text-muted); }

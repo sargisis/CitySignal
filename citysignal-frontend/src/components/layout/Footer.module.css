@@ -1,0 +1,19 @@
+.footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 64px 0 0; margin-top: 80px; }
+.inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; }
+
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-primary); margin-bottom: 12px; }
+.logoIcon { width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--accent-primary); color: #000; display: flex; align-items: center; justify-content: center; }
+.logoText { font-size: 1.1rem; font-weight: 800; }
+.logoAccent { color: var(--accent-primary); }
+.tagline { color: var(--text-secondary); font-size: 0.9rem; max-width: 300px; }
+.links { display: flex; flex-direction: column; gap: 10px; }
+.linksTitle { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 4px; }
+.links a { color: var(--text-secondary); font-size: 0.9rem; text-decoration: none; transition: color var(--transition); }
+.links a:hover { color: var(--accent-primary); }
+.bottom { padding: 24px 0; margin-top: 48px; border-top: 1px solid var(--border); }
+.bottom p { color: var(--text-muted); font-size: 0.8rem; }
+
+@media (max-width: 768px) {
+  .inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer { padding: 48px 0 0; margin-top: 48px; }
+}
