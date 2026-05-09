@@ -2,16 +2,19 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { MapPin, Menu, X, ChevronDown } from 'lucide-react';
+import { MapPin, Menu, X, ChevronDown, User as UserIcon, LogOut } from 'lucide-react';
 import { useLocale } from '@/hooks/useLocale';
+import { useAuth } from '@/hooks/useAuth';
 import { localeFlags, localeNames } from '@/lib/i18n';
 import { Locale } from '@/lib/types';
 import styles from './Header.module.css';
 
 export default function Header() {
   const { locale, setLocale, t } = useLocale();
+  const { user, setAuthModalOpen, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const locales: Locale[] = ['en', 'hy', 'ru'];
 
@@ -47,6 +50,33 @@ export default function Header() {
               </div>
             )}
           </div>
+
+          {user ? (
+            <div className={styles.userMenuWrapper}>
+              <button className={styles.userBtn} onClick={() => setUserMenuOpen(!userMenuOpen)}>
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt="User" className={styles.avatar} />
+                ) : (
+                  <div className={styles.avatarFallback}>
+                    <UserIcon size={16} />
+                  </div>
+                )}
+                <span className={styles.userName}>{user.displayName || user.email?.split('@')[0]}</span>
+                <ChevronDown size={14} />
+              </button>
+              {userMenuOpen && (
+                <div className={styles.userDropdown}>
+                  <button className={styles.dropdownItem} onClick={() => { signOut(); setUserMenuOpen(false); }}>
+                    <LogOut size={16} /> Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button className="btn btn-secondary btn-sm" onClick={() => setAuthModalOpen(true)}>
+              Sign In
+            </button>
+          )}
 
           <Link href="/report" className={`btn btn-primary btn-sm ${styles.ctaBtn}`}>
             {t('hero.cta.report')}

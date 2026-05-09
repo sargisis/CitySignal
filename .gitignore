@@ -1,1 +1,4 @@
 .next/
+citysignal-backend/server
+citysignal-backend/serviceAccountKey.json
+citysignal-backend/.env
