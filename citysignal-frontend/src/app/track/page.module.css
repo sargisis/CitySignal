@@ -1,0 +1,17 @@
+.page { padding: 80px 0; }
+.centered { max-width: 520px; margin: 0 auto; text-align: center; }
+.searchIcon { color: var(--accent-primary); margin-bottom: 24px; }
+.title { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+.subtitle { color: var(--text-secondary); margin-bottom: 32px; }
+.searchBox { display: flex; gap: 8px; }
+.searchInput { text-align: center; font-size: 1.1rem; letter-spacing: 1px; font-weight: 600; }
+.error { color: var(--accent-danger); margin-top: 16px; font-size: 0.9rem; }
+.examples { margin-top: 40px; }
+.examplesLabel { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 12px; }
+.exampleChips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.chip {
+  padding: 6px 14px; background: var(--bg-surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text-secondary); cursor: pointer;
+  font-family: monospace; font-size: 0.85rem; transition: all var(--transition);
+}
+.chip:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
